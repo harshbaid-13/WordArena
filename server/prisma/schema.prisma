@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  username     String   @unique @db.VarChar(20)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  elo          Int      @default(1200)
+  wins         Int      @default(0)
+  losses       Int      @default(0)
+  gamesPlayed  Int      @map("games_played") @default(0)
+  createdAt    DateTime @map("created_at") @default(now())
+  updatedAt    DateTime @map("updated_at") @updatedAt
+
+  matchesWon   Match[]  @relation("winner")
+  matchesLost  Match[]  @relation("loser")
+
+  @@map("users")
+  @@index([elo], map: "idx_users_elo")
+  @@index([email], map: "idx_users_email")
+  @@index([username], map: "idx_users_username")
+}
+
+model Match {
+  id              String    @id @default(uuid()) @db.Uuid
+  winnerId        String?   @map("winner_id") @db.Uuid
+  loserId         String?   @map("loser_id") @db.Uuid
+  winnerEloBefore Int       @map("winner_elo_before")
+  winnerEloAfter  Int       @map("winner_elo_after")
+  loserEloBefore  Int       @map("loser_elo_before")
+  loserEloAfter   Int       @map("loser_elo_after")
+  targetWord      String    @map("target_word") @db.VarChar(5)
+  replayLog       Json      @map("replay_log") @default("[]") @db.JsonB
+  durationMs      Int?      @map("duration_ms")
+  isBotMatch      Boolean   @map("is_bot_match") @default(false)
+  botDifficulty   String?   @map("bot_difficulty") @db.VarChar(20)
+  playedAt        DateTime  @map("played_at") @default(now())
+
+  winner          User?     @relation("winner", fields: [winnerId], references: [id])
+  loser           User?     @relation("loser", fields: [loserId], references: [id])
+
+  @@map("matches")
+  @@index([winnerId], map: "idx_matches_winner")
+  @@index([loserId], map: "idx_matches_loser")
+  @@index([playedAt], map: "idx_matches_played_at")
+  @@index([isBotMatch], map: "idx_matches_is_bot")
+}
