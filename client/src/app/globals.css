@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tile-green: #538d4e;
+  --tile-yellow: #b59f3b;
+  --tile-grey: #3a3a3c;
+  --tile-empty: #121213;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a0b 0%, #111113 50%, #0a0a0b 100%);
+  min-height: 100vh;
+}
+
+/* Tile animations */
+.tile-flip {
+  animation: flip 0.5s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.tile-pop {
+  animation: pop 0.1s ease-in-out;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Keyboard styles */
+.key {
+  @apply px-3 py-4 rounded-md font-bold text-sm uppercase transition-all duration-150;
+  @apply bg-gray-600 hover:bg-gray-500 active:scale-95;
+}
+
+.key-wide {
+  @apply px-4;
+}
+
+.key-green {
+  @apply bg-tile-green hover:bg-tile-green/90;
+}
+
+.key-yellow {
+  @apply bg-tile-yellow hover:bg-tile-yellow/90;
+}
+
+.key-grey {
+  @apply bg-tile-grey hover:bg-tile-grey/90;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3c;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4c;
+}
+
+/* Glow effects */
+.glow-green {
+  box-shadow: 0 0 20px rgba(83, 141, 78, 0.5);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Board container */
+.board-container {
+  perspective: 1000px;
+}
+
+/* Win/Loss animations */
+.winner-celebration {
+  animation: celebrate 0.5s ease-out;
+}
+
+@keyframes celebrate {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
